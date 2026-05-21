@@ -1,0 +1,1828 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Briefing de Proyecto — KUND. advisory</title>
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dark:    #111318;
+      --dark2:   #1C2030;
+      --gold:    #C4922A;
+      --gold-lt: #E8BA5A;
+      --gold-bg: #FDF6E9;
+      --bg:      #F7F6F2;
+      --white:   #FFFFFF;
+      --border:  #E3DDD3;
+      --text:    #1F2937;
+      --muted:   #6B7280;
+      --error:   #DC2626;
+      --radius:  10px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ───────────────────────────────────────────── */
+    header {
+      background: var(--dark);
+      padding: 18px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo { display: flex; flex-direction: column; line-height: 1; }
+
+    .logo-kund {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 700;
+      font-size: 22px;
+      letter-spacing: 0.18em;
+      color: #fff;
+    }
+
+    .logo-advisory {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 300;
+      font-size: 10px;
+      letter-spacing: 0.38em;
+      color: var(--gold-lt);
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .header-label {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+
+    /* ── PROGRESS ─────────────────────────────────────────── */
+    .progress-wrap {
+      background: var(--dark2);
+      padding: 13px 40px;
+      display: none;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .progress-track {
+      flex: 1;
+      height: 3px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 2px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-lt));
+      transition: width 0.45s ease;
+      width: 0%;
+    }
+
+    .progress-dots { display: flex; gap: 8px; align-items: center; }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      transition: all 0.3s ease;
+    }
+
+    .dot.done { background: rgba(196,146,42,0.45); }
+
+    .dot.active {
+      background: var(--gold);
+      width: 10px;
+      height: 10px;
+    }
+
+    .progress-label {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      min-width: 38px;
+      text-align: right;
+    }
+
+    /* ── MAIN ─────────────────────────────────────────────── */
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 44px 20px 72px;
+    }
+
+    .form-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 24px rgba(0,0,0,0.07);
+      width: 100%;
+      max-width: 700px;
+      overflow: hidden;
+    }
+
+    /* ── STEPS ────────────────────────────────────────────── */
+    .step { display: none; padding: 52px 52px 44px; }
+
+    .step.active {
+      display: block;
+      animation: fadeIn 0.35s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── STEP HEADER ──────────────────────────────────────── */
+    .step-header { margin-bottom: 36px; }
+
+    .step-tag {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .step-title {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 700;
+      font-size: 26px;
+      color: var(--text);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .step-subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── FORM ELEMENTS ────────────────────────────────────── */
+    .form-group { margin-bottom: 22px; }
+
+    .form-label {
+      display: block;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 9px;
+    }
+
+    .form-label .req  { color: var(--gold); }
+
+    .form-label .hint {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+      font-size: 11px;
+      color: var(--muted);
+      margin-left: 5px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text);
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 13px 16px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    input::placeholder, textarea::placeholder { color: var(--muted); }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(196,146,42,0.12);
+    }
+
+    input.field-error, select.field-error, textarea.field-error {
+      border-color: var(--error);
+      box-shadow: 0 0 0 3px rgba(220,38,38,0.08);
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 44px;
+      cursor: pointer;
+    }
+
+    textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+
+    .error-msg {
+      display: none;
+      font-size: 12px;
+      color: var(--error);
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    .error-msg.show { display: block; }
+
+    /* ── GRID ─────────────────────────────────────────────── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* ── OPTION CARDS ─────────────────────────────────────── */
+    .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .cards-grid.cols-1 { grid-template-columns: 1fr; }
+
+    .option-card { position: relative; }
+
+    .option-card input[type="radio"],
+    .option-card input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+    }
+
+    .option-card label {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      background: var(--white);
+      user-select: none;
+    }
+
+    .option-card label:hover { border-color: rgba(196,146,42,0.4); }
+
+    .option-card input:checked + label {
+      border-color: var(--gold);
+      background: var(--gold-bg);
+    }
+
+    .opt-indicator {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--border);
+      border-radius: 50%;
+      background: var(--white);
+      margin-top: 2px;
+      transition: border-color 0.2s, background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .checkbox-card .opt-indicator { border-radius: 4px; }
+
+    .option-card input:checked + label .opt-indicator {
+      border-color: var(--gold);
+      background: var(--gold);
+    }
+
+    .option-card input[type="radio"]:checked + label .opt-indicator::after {
+      content: '';
+      display: block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--white);
+    }
+
+    .option-card input[type="checkbox"]:checked + label .opt-indicator::after {
+      content: '';
+      display: block;
+      width: 10px;
+      height: 10px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10'%3E%3Cpolyline points='1,5 4.5,8.5 11,1' stroke='white' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+    }
+
+    .opt-icon { font-size: 20px; flex-shrink: 0; line-height: 1.3; }
+    .opt-body { flex: 1; }
+
+    .opt-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .opt-desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+      line-height: 1.5;
+    }
+
+    /* ── NAVIGATION ───────────────────────────────────────── */
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .btn {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: var(--radius);
+      padding: 13px 26px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      transition: all 0.2s;
+    }
+
+    .btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+    .btn-primary { background: var(--gold); color: #fff; }
+
+    .btn-primary:hover {
+      background: #ae7e22;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(196,146,42,0.32);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1.5px solid var(--border);
+    }
+
+    .btn-ghost:hover { color: var(--text); border-color: #c7c0b5; }
+
+    /* ── WELCOME ──────────────────────────────────────────── */
+    .welcome-wrap { text-align: center; padding: 12px 0; }
+
+    .welcome-icon {
+      width: 68px;
+      height: 68px;
+      background: var(--gold-bg);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      margin: 0 auto 28px;
+    }
+
+    .welcome-title {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 700;
+      font-size: 32px;
+      line-height: 1.15;
+      margin-bottom: 18px;
+    }
+
+    .welcome-desc {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 500px;
+      margin: 0 auto 28px;
+    }
+
+    .welcome-tags {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+
+    .welcome-tag {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 16px;
+    }
+
+    /* ── REVIEW BLOCKS ────────────────────────────────────── */
+    .review-block {
+      background: var(--bg);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 14px;
+    }
+
+    .review-block-title {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+
+    .review-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 7px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .review-key { color: var(--muted); min-width: 110px; flex-shrink: 0; }
+    .review-val { color: var(--text); font-weight: 500; }
+
+    /* ── CONSENT ──────────────────────────────────────────── */
+    .consent-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 18px 20px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      margin: 24px 0 4px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .consent-wrap:has(#consent:checked) {
+      border-color: var(--gold);
+      background: var(--gold-bg);
+    }
+
+    #consent {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      cursor: pointer;
+      accent-color: var(--gold);
+      margin-top: 1px;
+    }
+
+    .consent-text { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+    /* ── INFO BOX ─────────────────────────────────────────── */
+    .info-box {
+      background: var(--gold-bg);
+      border: 1.5px solid rgba(196,146,42,0.28);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.65;
+      margin-bottom: 28px;
+    }
+
+    /* ── SUCCESS ──────────────────────────────────────────── */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 72px 52px;
+      animation: fadeIn 0.35s ease forwards;
+    }
+
+    .success-screen.active { display: block; }
+
+    .success-icon {
+      width: 68px;
+      height: 68px;
+      background: #F0FDF4;
+      border: 2px solid #86EFAC;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 26px;
+    }
+
+    .success-icon svg { width: 28px; height: 28px; }
+
+    .success-title {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 700;
+      font-size: 28px;
+      margin-bottom: 18px;
+    }
+
+    .success-text {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 460px;
+      margin: 0 auto;
+    }
+
+    /* ── CONDITIONAL ──────────────────────────────────────── */
+    .conditional { display: none; }
+    .conditional.show { display: block; }
+    #hidden-form { display: none; }
+
+    /* ── FOOTER ───────────────────────────────────────────── */
+    footer {
+      background: var(--dark);
+      padding: 16px 40px;
+      text-align: center;
+    }
+
+    .footer-text {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.25);
+    }
+
+    /* ── RESPONSIVE ───────────────────────────────────────── */
+    @media (max-width: 640px) {
+      header, footer { padding: 14px 20px; }
+      .progress-wrap { padding: 12px 20px; }
+      main { padding: 20px 12px 48px; }
+      .step { padding: 32px 24px 28px; }
+      .success-screen { padding: 48px 24px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .welcome-title { font-size: 26px; }
+      .nav-buttons { flex-direction: column-reverse; gap: 10px; }
+      .nav-buttons .btn { width: 100%; justify-content: center; }
+      .review-key { min-width: 90px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ HEADER ══════════════════════════════════════════════ -->
+<header>
+  <div class="logo">
+    <span class="logo-kund">KUND<span style="color:var(--gold)">.</span></span>
+    <span class="logo-advisory">advisory</span>
+  </div>
+  <span class="header-label">Briefing de Proyecto</span>
+</header>
+
+<!-- ══ PROGRESS BAR ════════════════════════════════════════ -->
+<div class="progress-wrap" id="progressWrap">
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <div class="progress-dots">
+    <div class="dot" data-step="1"></div>
+    <div class="dot" data-step="2"></div>
+    <div class="dot" data-step="3"></div>
+    <div class="dot" data-step="4"></div>
+    <div class="dot" data-step="5"></div>
+    <div class="dot" data-step="6"></div>
+  </div>
+  <div class="progress-label" id="progressLabel">1 / 6</div>
+</div>
+
+<!-- ══ MAIN ════════════════════════════════════════════════ -->
+<main>
+<div class="form-card" id="formCard">
+
+  <!-- ── PASO 0 · BIENVENIDA ──────────────────────────────── -->
+  <div class="step active" id="step-0">
+    <div class="welcome-wrap">
+      <div class="welcome-icon">📋</div>
+      <h1 class="welcome-title">Briefing de <span style="color:var(--gold)">Proyecto</span></h1>
+      <p class="welcome-desc">
+        Gracias por confiar en <strong>KUND. advisory</strong>. Este formulario nos permite
+        conocer a fondo tu proyecto para entregarte un resultado de la más alta calidad.
+        Responde con la mayor precisión posible — la información que compartas es
+        completamente confidencial.
+      </p>
+      <div class="welcome-tags">
+        <span class="welcome-tag">~ 8 minutos</span>
+        <span class="welcome-tag">Confidencial</span>
+        <span class="welcome-tag">Sin cuenta requerida</span>
+      </div>
+      <button class="btn btn-primary" onclick="startForm()">
+        Comenzar
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── PASO 1 · DATOS DE CONTACTO ──────────────────────── -->
+  <div class="step" id="step-1">
+    <div class="step-header">
+      <div class="step-tag">Paso 1 de 6</div>
+      <h2 class="step-title">Datos de Contacto</h2>
+      <p class="step-subtitle">Información básica del responsable del proyecto y la empresa.</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="form-group">
+        <label class="form-label" for="nombre">Nombre completo <span class="req">*</span></label>
+        <input type="text" id="nombre" name="Nombre completo" placeholder="Ej. María García" autocomplete="name">
+        <div class="error-msg" id="err-nombre">Por favor ingresa tu nombre completo.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cargo">Cargo / Posición <span class="hint">Opcional</span></label>
+        <input type="text" id="cargo" name="Cargo" placeholder="Ej. CEO, Fundador, Gerente">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="empresa">Empresa / Nombre del negocio <span class="req">*</span></label>
+        <input type="text" id="empresa" name="Empresa" placeholder="Ej. Innovatech S.A.C." autocomplete="organization">
+        <div class="error-msg" id="err-empresa">Por favor ingresa el nombre de tu empresa.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="correo">Correo electrónico <span class="req">*</span></label>
+        <input type="email" id="correo" name="Correo electrónico" placeholder="correo@empresa.com" autocomplete="email">
+        <div class="error-msg" id="err-correo">Por favor ingresa un correo electrónico válido.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="telefono">Teléfono / WhatsApp <span class="hint">Opcional</span></label>
+        <input type="tel" id="telefono" name="Teléfono" placeholder="+51 999 000 000" autocomplete="tel">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="ubicacion">País y ciudad <span class="hint">Opcional</span></label>
+        <input type="text" id="ubicacion" name="Ubicación" placeholder="Ej. Lima, Perú">
+      </div>
+    </div>
+
+    <div class="nav-buttons">
+      <span></span>
+      <button class="btn btn-primary" onclick="nextStep()">
+        Continuar
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── PASO 2 · CONTEXTO DEL NEGOCIO ───────────────────── -->
+  <div class="step" id="step-2">
+    <div class="step-header">
+      <div class="step-tag">Paso 2 de 6</div>
+      <h2 class="step-title">Contexto del Negocio</h2>
+      <p class="step-subtitle">Necesitamos entender la situación actual de tu empresa para calibrar el trabajo.</p>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Constitución legal <span class="req">*</span></label>
+      <div class="cards-grid">
+        <div class="option-card">
+          <input type="radio" name="constitucion" id="const-1" value="Sí, constituida">
+          <label for="const-1">
+            <div class="opt-indicator"></div>
+            <div class="opt-body">
+              <div class="opt-title">Sí, constituida</div>
+              <div class="opt-desc">Con RUC / personería jurídica activa</div>
+            </div>
+          </label>
+        </div>
+        <div class="option-card">
+          <input type="radio" name="constitucion" id="const-2" value="En proceso">
+          <label for="const-2">
+            <div class="opt-indicator"></div>
+            <div class="opt-body">
+              <div class="opt-title">En proceso</div>
+              <div class="opt-desc">Trámites en curso</div>
+            </div>
+          </label>
+        </div>
+        <div class="option-card">
+          <input type="radio" name="constitucion" id="const-3" value="No, informal">
+          <label for="const-3">
+            <div class="opt-indicator"></div>
+            <div class="opt-body">
+              <div class="opt-title">No, informal</div>
+              <div class="opt-desc">Opera sin personería jurídica</div>
+            </div>
+          </label>
+        </div>
+        <div class="option-card">
+          <input type="radio" name="constitucion" id="const-4" value="Empresa nueva">
+          <label for="const-4">
+            <div class="opt-indicator"></div>
+            <div class="opt-body">
+              <div class="opt-title">Empresa nueva</div>
+              <div class="opt-desc">Proyecto / idea en desarrollo</div>
+            </div>
+          </label>
+        </div>
+      </div>
+      <div class="error-msg" id="err-constitucion">Por favor selecciona una opción.</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="sector">Sector / Industria <span class="req">*</span></label>
+      <select id="sector" name="Sector">
+        <option value="">Selecciona tu sector</option>
+        <option>Tecnología / Software</option>
+        <option>Retail / Comercio</option>
+        <option>Alimentos y Bebidas</option>
+        <option>Salud / Bienestar</option>
+        <option>Educación</option>
+        <option>Construcción / Inmobiliaria</option>
+        <option>Manufactura / Industria</option>
+        <option>Servicios profesionales</option>
+        <option>Turismo / Hospitalidad</option>
+        <option>Finanzas / Seguros</option>
+        <option>Logística / Transporte</option>
+        <option>Agroindustria</option>
+        <option>Moda / Diseño</option>
+        <option>Otro</option>
+      </select>
+      <div class="error-msg" id="err-sector">Por favor selecciona tu sector.</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="etapa">Etapa del negocio <span class="req">*</span></label>
+      <select id="etapa" name="Etapa del negocio">
+        <option value="">Selecciona la etapa</option>
+        <option>Idea / Pre-lanzamiento</option>
+        <option>Startup (menos de 2 años)</option>
+        <option>En crecimiento (2–5 años)</option>
+        <option>Empresa consolidada (más de 5 años)</option>
+      </select>
+      <div class="error-msg" id="err-etapa">Por favor selecciona la etapa de tu negocio.</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="empleados">N.° de empleados <span class="hint">Opcional</span></label>
+      <select id="empleados" name="Número de empleados">
+        <option value="">Selecciona un rango</option>
+        <option>Solo yo (0–1)</option>
+        <option>2–5</option>
+        <option>6–20</option>
+        <option>21–50</option>
+        <option>Más de 50</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="facturacion">Facturación anual aprox. <span class="hint">Opcional</span></label>
+      <select id="facturacion" name="Facturación anual">
+        <option value="">Selecciona un rango</option>
+        <option>Pre-ingresos (aún no factura)</option>
+        <option>Menos de USD 50,000</option>
+        <option>USD 50,000–150,000</option>
+        <option>USD 150,000–500,000</option>
+        <option>USD 500,000–1,000,000</option>
+        <option>Más de USD 1,000,000</option>
+        <option>Prefiero no indicarlo</option>
+      </select>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-ghost" onclick="prevStep()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Atrás
+      </button>
+      <button class="btn btn-primary" onclick="nextStep()">
+        Continuar
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── PASO 3 · SERVICIO CONTRATADO ────────────────────── -->
+  <div class="step" id="step-3">
+    <div class="step-header">
+      <div class="step-tag">Paso 3 de 6</div>
+      <h2 class="step-title">¿Qué trabajamos juntos?</h2>
+      <p class="step-subtitle">Selecciona el servicio contratado. Esto determina las preguntas del siguiente paso.</p>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Servicio contratado <span class="req">*</span></label>
+      <div class="cards-grid cols-1">
+        <div class="option-card">
+          <input type="radio" name="servicio" id="svc-plan" value="plan" onchange="handleServiceChange()">
+          <label for="svc-plan">
+            <div class="opt-indicator" style="margin-top:3px"></div>
+            <span class="opt-icon">📊</span>
+            <div class="opt-body">
+              <div class="opt-title">Plan de Negocios Completo</div>
+              <div class="opt-desc">Estrategia, modelo de negocio, análisis de mercado y proyecciones financieras integradas.</div>
+            </div>
+          </label>
+        </div>
+        <div class="option-card">
+          <input type="radio" name="servicio" id="svc-financiero" value="financiero" onchange="handleServiceChange()">
+          <label for="svc-financiero">
+            <div class="opt-indicator" style="margin-top:3px"></div>
+            <span class="opt-icon">📈</span>
+            <div class="opt-body">
+              <div class="opt-title">Análisis Financiero</div>
+              <div class="opt-desc">Proyecciones, valuación (DCF / CAPM / WACC), flujo de caja, break-even o análisis de rentabilidad.</div>
+            </div>
+          </label>
+        </div>
+        <div class="option-card">
+          <input type="radio" name="servicio" id="svc-marketing" value="marketing" onchange="handleServiceChange()">
+          <label for="svc-marketing">
+            <div class="opt-indicator" style="margin-top:3px"></div>
+            <span class="opt-icon">🎯</span>
+            <div class="opt-body">
+              <div class="opt-title">Plan de Marketing / Go-to-Market</div>
+              <div class="opt-desc">Estrategia de mercado, segmentación, posicionamiento y plan de acción comercial.</div>
+            </div>
+          </label>
+        </div>
+        <div class="option-card">
+          <input type="radio" name="servicio" id="svc-modelo" value="modelo" onchange="handleServiceChange()">
+          <label for="svc-modelo">
+            <div class="opt-indicator" style="margin-top:3px"></div>
+            <span class="opt-icon">🧩</span>
+            <div class="opt-body">
+              <div class="opt-title">Empaquetamiento del Modelo de Negocio</div>
+              <div class="opt-desc">Business Model Canvas, propuesta de valor, estructura de ingresos y socios estratégicos.</div>
+            </div>
+          </label>
+        </div>
+        <div class="option-card">
+          <input type="radio" name="servicio" id="svc-otro" value="otro" onchange="handleServiceChange()">
+          <label for="svc-otro">
+            <div class="opt-indicator" style="margin-top:3px"></div>
+            <span class="opt-icon">✏️</span>
+            <div class="opt-body">
+              <div class="opt-title">Otro / Mixto</div>
+              <div class="opt-desc">Combinación de servicios o alcance específico a definir.</div>
+            </div>
+          </label>
+        </div>
+      </div>
+      <div class="error-msg" id="err-servicio">Por favor selecciona el servicio contratado.</div>
+    </div>
+
+    <div class="form-group conditional" id="cond-otro-desc">
+      <label class="form-label" for="otro-desc">Describe el servicio o alcance solicitado <span class="req">*</span></label>
+      <textarea id="otro-desc" name="Descripción servicio personalizado" rows="4"
+        placeholder="Ej. Plan de negocios + análisis financiero + pitch deck para inversores…"></textarea>
+      <div class="error-msg" id="err-otro-desc">Por favor describe el servicio solicitado.</div>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-ghost" onclick="prevStep()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Atrás
+      </button>
+      <button class="btn btn-primary" onclick="nextStep()">
+        Continuar
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── PASO 4 · DETALLE DEL SERVICIO ───────────────────── -->
+  <div class="step" id="step-4">
+    <div class="step-header">
+      <div class="step-tag">Paso 4 de 6</div>
+      <h2 class="step-title" id="step4-title">Detalle del Servicio</h2>
+      <p class="step-subtitle" id="step4-subtitle">Cuéntanos más para calibrar el trabajo.</p>
+    </div>
+
+    <!-- ·· 4A — PLAN DE NEGOCIOS ·················· -->
+    <div id="sec-plan" class="svc-section" style="display:none">
+      <div class="form-group">
+        <label class="form-label">Propósito principal del plan <span class="req">*</span></label>
+        <div class="cards-grid">
+          <div class="option-card">
+            <input type="radio" name="plan-proposito" id="pp-1" value="Financiamiento bancario">
+            <label for="pp-1"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Financiamiento bancario</div><div class="opt-desc">Crédito o préstamo institucional</div></div></label>
+          </div>
+          <div class="option-card">
+            <input type="radio" name="plan-proposito" id="pp-2" value="Inversionistas / fondos">
+            <label for="pp-2"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Inversionistas / fondos</div><div class="opt-desc">Angels, VC, socios estratégicos</div></div></label>
+          </div>
+          <div class="option-card">
+            <input type="radio" name="plan-proposito" id="pp-3" value="Uso interno">
+            <label for="pp-3"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Uso interno</div><div class="opt-desc">Hoja de ruta y gestión del negocio</div></div></label>
+          </div>
+          <div class="option-card">
+            <input type="radio" name="plan-proposito" id="pp-4" value="Expansión / franquicia">
+            <label for="pp-4"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Expansión / franquicia</div><div class="opt-desc">Crecimiento o replicación del modelo</div></div></label>
+          </div>
+          <div class="option-card">
+            <input type="radio" name="plan-proposito" id="pp-5" value="Concurso o convocatoria">
+            <label for="pp-5"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Concurso o convocatoria</div><div class="opt-desc">StartUp Perú, Fondos COFIDE, etc.</div></div></label>
+          </div>
+          <div class="option-card">
+            <input type="radio" name="plan-proposito" id="pp-6" value="Otro">
+            <label for="pp-6"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Otro</div><div class="opt-desc">Especificar en comentarios</div></div></label>
+          </div>
+        </div>
+        <div class="error-msg" id="err-plan-proposito">Por favor selecciona una opción.</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="plan-producto">Describe tu producto o servicio principal <span class="req">*</span></label>
+        <textarea id="plan-producto" name="Producto o servicio principal" rows="5"
+          placeholder="¿Qué ofreces? ¿Cómo funciona? ¿Qué problema resuelve? Sé tan específico como puedas."></textarea>
+        <div class="error-msg" id="err-plan-producto">Por favor describe tu producto o servicio.</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="plan-mercado">Mercado objetivo / cliente ideal <span class="req">*</span></label>
+        <textarea id="plan-mercado" name="Mercado objetivo" rows="4"
+          placeholder="¿A quién le vendes? Describe el perfil de tu cliente ideal: edad, ocupación, geografía, necesidades, poder adquisitivo…"></textarea>
+        <div class="error-msg" id="err-plan-mercado">Por favor describe tu mercado objetivo.</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="plan-competidores">¿Tienes competidores identificados? <span class="hint">Opcional</span></label>
+        <select id="plan-competidores" name="Competidores identificados">
+          <option value="">Selecciona una opción</option>
+          <option>Sí, los tengo claramente identificados</option>
+          <option>Tengo algunos, pero necesito profundizar</option>
+          <option>No los he identificado aún</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="plan-proyeccion">Años de proyección financiera <span class="hint">Opcional</span></label>
+        <select id="plan-proyeccion" name="Años de proyección financiera">
+          <option value="">Selecciona un horizonte</option>
+          <option>1 año</option>
+          <option>3 años (recomendado)</option>
+          <option>5 años</option>
+          <option>Más de 5 años</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">¿Cuentas con información financiera histórica? <span class="hint">Opcional</span></label>
+        <div class="cards-grid">
+          <div class="option-card">
+            <input type="radio" name="plan-historico" id="ph-1" value="Sí, tengo estados financieros completos">
+            <label for="ph-1"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Sí, tengo estados financieros completos</div></div></label>
+          </div>
+          <div class="option-card">
+            <input type="radio" name="plan-historico" id="ph-2" value="Solo datos parciales">
+            <label for="ph-2"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Solo datos parciales</div></div></label>
+          </div>
+          <div class="option-card">
+            <input type="radio" name="plan-historico" id="ph-3" value="No, negocio nuevo">
+            <label for="ph-3"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">No, negocio nuevo</div></div></label>
+          </div>
+          <div class="option-card">
+            <input type="radio" name="plan-historico" id="ph-4" value="Tengo datos sin estructurar">
+            <label for="ph-4"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Tengo datos sin estructurar</div></div></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">¿Qué secciones necesitan más trabajo? <span class="hint">Opcional — puedes elegir varias</span></label>
+        <div class="cards-grid">
+          <div class="option-card checkbox-card">
+            <input type="checkbox" name="plan-secciones" id="ps-1" value="Estrategia y visión">
+            <label for="ps-1"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Estrategia y visión</div></div></label>
+          </div>
+          <div class="option-card checkbox-card">
+            <input type="checkbox" name="plan-secciones" id="ps-2" value="Análisis de mercado">
+            <label for="ps-2"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Análisis de mercado</div></div></label>
+          </div>
+          <div class="option-card checkbox-card">
+            <input type="checkbox" name="plan-secciones" id="ps-3" value="Proyecciones financieras">
+            <label for="ps-3"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Proyecciones financieras</div></div></label>
+          </div>
+          <div class="option-card checkbox-card">
+            <input type="checkbox" name="plan-secciones" id="ps-4" value="Plan operacional">
+            <label for="ps-4"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Plan operacional</div></div></label>
+          </div>
+          <div class="option-card checkbox-card">
+            <input type="checkbox" name="plan-secciones" id="ps-5" value="Estrategia de marketing">
+            <label for="ps-5"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Estrategia de marketing</div></div></label>
+          </div>
+          <div class="option-card checkbox-card">
+            <input type="checkbox" name="plan-secciones" id="ps-6" value="Todo desde cero">
+            <label for="ps-6"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Todo desde cero</div></div></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ·· 4B — ANÁLISIS FINANCIERO ················ -->
+    <div id="sec-financiero" class="svc-section" style="display:none">
+      <div class="form-group">
+        <label class="form-label">¿Para qué usarás el análisis? <span class="req">*</span></label>
+        <div class="cards-grid">
+          <div class="option-card">
+            <input type="radio" name="fin-uso" id="fu-1" value="Captación de inversión">
+            <label for="fu-1"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Captación de inversión</div><div class="opt-desc">Angels, VC, socios</div></div></label>
+          </div>
+          <div class="option-card">
+            <input type="radio" name="fin-uso" id="fu-2" value="Crédito bancario">
+            <label for="fu-2"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Crédito bancario</div><div class="opt-desc">Préstamo o línea de crédito</div></div></label>
+          </div>
+          <div class="option-card">
+            <input type="radio" name="fin-uso" id="fu-3" value="Venta / M&amp;A">
+            <label for="fu-3"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Venta / M&amp;A</div><div class="opt-desc">Due diligence o valorización</div></div></label>
+          </div>
+          <div class="option-card">
+            <input type="radio" name="fin-uso" id="fu-4" value="Decisión interna">
+            <label for="fu-4"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Decisión interna</div><div class="opt-desc">Gestión, control, planificación</div></div></label>
+          </div>
+        </div>
+        <div class="error-msg" id="err-fin-uso">Por favor selecciona una opción.</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Tipo de análisis requerido <span class="hint">Opcional — puedes elegir varios</span></label>
+        <div class="cards-grid">
+          <div class="option-card checkbox-card">
+            <input type="checkbox" name="fin-tipo" id="ft-1" value="Proyecciones financieras (3–5 años)">
+            <label for="ft-1"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Proyecciones financieras (3–5 años)</div></div></label>
+          </div>
+          <div class="option-card checkbox-card">
+            <input type="checkbox" name="fin-tipo" id="ft-2" value="Valuación DCF / CAPM / WACC">
+            <label for="ft-2"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Valuación DCF / CAPM / WACC</div></div></label>
+          </div>
+          <div class="option-card checkbox-card">
+            <input type="checkbox" name="fin-tipo" id="ft-3" value="Análisis Break-even">
+            <label for="ft-3"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Análisis Break-even</div></div></label>
+          </div>
+          <div class="option-card checkbox-card">
+            <input type="checkbox" name="fin-tipo" id="ft-4" value="Flujo de caja libre (FCF)">
+            <label for="ft-4"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Flujo de caja libre (FCF)</div></div></label>
+          </div>
+          <div class="option-card checkbox-card">
+            <input type="checkbox" name="fin-tipo" id="ft-5" value="Rentabilidad y márgenes">
+            <label for="ft-5"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Rentabilidad y márgenes</div></div></label>
+          </div>
+          <div class="option-card checkbox-card">
+            <input type="checkbox" name="fin-tipo" id="ft-6" value="Análisis de sensibilidad / escenarios">
+            <label for="ft-6"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Análisis de sensibilidad / escenarios</div></div></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="fin-eeff">¿Cuentas con EEFF históricos? <span class="hint">Opcional</span></label>
+        <select id="fin-eeff" name="EEFF históricos">
+          <option value="">Selecciona una opción</option>
+          <option>Sí, últimos 3 años o más</option>
+          <option>Sí, solo el último año</option>
+          <option>Datos parciales / informales</option>
+          <option>No, empresa nueva</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="fin-horizonte">Horizonte de proyección <span class="hint">Opcional</span></label>
+        <select id="fin-horizonte" name="Horizonte de proyección">
+          <option value="">Selecciona un horizonte</option>
+          <option>1 año</option>
+          <option>3 años</option>
+          <option>5 años</option>
+          <option>Más de 5 años</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="fin-deuda">¿Tiene deuda financiera relevante? <span class="hint">Opcional</span></label>
+        <select id="fin-deuda" name="Deuda financiera">
+          <option value="">Selecciona una opción</option>
+          <option>Sí, deuda bancaria o financiera</option>
+          <option>Solo deuda con proveedores</option>
+          <option>No tiene deuda</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="fin-activos">¿Hay activos fijos significativos? <span class="hint">Opcional</span></label>
+        <select id="fin-activos" name="Activos fijos">
+          <option value="">Selecciona una opción</option>
+          <option>Sí, maquinaria / equipos / inmuebles</option>
+          <option>Activos menores</option>
+          <option>No, negocio de servicios / software</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ·· 4C — PLAN DE MARKETING ··················· -->
+    <div id="sec-marketing" class="svc-section" style="display:none">
+      <div class="form-group">
+        <label class="form-label">Objetivo principal del plan <span class="req">*</span></label>
+        <div class="cards-grid">
+          <div class="option-card">
+            <input type="radio" name="mkt-objetivo" id="mo-1" value="Lanzamiento">
+            <label for="mo-1"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Lanzamiento</div><div class="opt-desc">Introducir al mercado algo nuevo</div></div></label>
+          </div>
+          <div class="option-card">
+            <input type="radio" name="mkt-objetivo" id="mo-2" value="Expansión">
+            <label for="mo-2"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Expansión</div><div class="opt-desc">Nuevos mercados o geografías</div></div></label>
+          </div>
+          <div class="option-card">
+            <input type="radio" name="mkt-objetivo" id="mo-3" value="Incrementar ventas">
+            <label for="mo-3"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Incrementar ventas</div><div class="opt-desc">Más clientes o mayor ticket promedio</div></div></label>
+          </div>
+          <div class="option-card">
+            <input type="radio" name="mkt-objetivo" id="mo-4" value="Reposicionamiento">
+            <label for="mo-4"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Reposicionamiento</div><div class="opt-desc">Cambiar percepción en el mercado</div></div></label>
+          </div>
+        </div>
+        <div class="error-msg" id="err-mkt-objetivo">Por favor selecciona una opción.</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">¿Tienes una propuesta de valor definida? <span class="hint">Opcional</span></label>
+        <div class="cards-grid">
+          <div class="option-card">
+            <input type="radio" name="mkt-propuesta" id="mp-1" value="Sí, está bien definida">
+            <label for="mp-1"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Sí, está bien definida</div></div></label>
+          </div>
+          <div class="option-card">
+            <input type="radio" name="mkt-propuesta" id="mp-2" value="Parcialmente">
+            <label for="mp-2"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Parcialmente</div></div></label>
+          </div>
+          <div class="option-card">
+            <input type="radio" name="mkt-propuesta" id="mp-3" value="No, hay que construirla">
+            <label for="mp-3"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">No, hay que construirla</div></div></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="mkt-digital">¿Cuentas con presencia digital? <span class="hint">Opcional</span></label>
+        <select id="mkt-digital" name="Presencia digital">
+          <option value="">Selecciona una opción</option>
+          <option>Sí, web + redes sociales activas</option>
+          <option>Solo redes sociales</option>
+          <option>Solo web</option>
+          <option>Muy básica o inexistente</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="mkt-canal">Principal canal de venta actual <span class="hint">Opcional</span></label>
+        <select id="mkt-canal" name="Canal de venta principal">
+          <option value="">Selecciona una opción</option>
+          <option>Venta directa / fuerza comercial</option>
+          <option>E-commerce / tienda online</option>
+          <option>Punto de venta físico</option>
+          <option>Referidos / boca a boca</option>
+          <option>Redes sociales / marketing digital</option>
+          <option>Canal mixto</option>
+          <option>Aún no hay canal definido</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="mkt-presupuesto">Presupuesto estimado de marketing <span class="hint">Opcional</span></label>
+        <select id="mkt-presupuesto" name="Presupuesto de marketing">
+          <option value="">Selecciona un rango</option>
+          <option>Sin presupuesto definido</option>
+          <option>Menos de USD 500/mes</option>
+          <option>USD 500–2,000/mes</option>
+          <option>USD 2,000–5,000/mes</option>
+          <option>Más de USD 5,000/mes</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="mkt-buyer">Describe a tu cliente ideal <span class="hint">Opcional</span></label>
+        <textarea id="mkt-buyer" name="Cliente ideal" rows="4"
+          placeholder="Perfil del buyer persona: edad, género, ocupación, necesidades, plataformas que usa, qué lo motiva a comprar…"></textarea>
+      </div>
+    </div>
+
+    <!-- ·· 4D — MODELO DE NEGOCIO ·················· -->
+    <div id="sec-modelo" class="svc-section" style="display:none">
+      <div class="form-group">
+        <label class="form-label">¿En qué etapa está tu modelo? <span class="req">*</span></label>
+        <div class="cards-grid">
+          <div class="option-card">
+            <input type="radio" name="mod-etapa" id="me-1" value="Idea">
+            <label for="me-1"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Idea</div><div class="opt-desc">Sin validación en el mercado</div></div></label>
+          </div>
+          <div class="option-card">
+            <input type="radio" name="mod-etapa" id="me-2" value="Prototipo / MVP">
+            <label for="me-2"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Prototipo / MVP</div><div class="opt-desc">En pruebas con primeros usuarios</div></div></label>
+          </div>
+          <div class="option-card">
+            <input type="radio" name="mod-etapa" id="me-3" value="Validado">
+            <label for="me-3"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Validado</div><div class="opt-desc">Ya genera ingresos y tiene tracción</div></div></label>
+          </div>
+          <div class="option-card">
+            <input type="radio" name="mod-etapa" id="me-4" value="Escalando">
+            <label for="me-4"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Escalando</div><div class="opt-desc">Crecimiento acelerado, busca optimizar</div></div></label>
+          </div>
+        </div>
+        <div class="error-msg" id="err-mod-etapa">Por favor selecciona una opción.</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">¿Qué aspectos necesitan más trabajo? <span class="hint">Opcional — puedes elegir varios</span></label>
+        <div class="cards-grid">
+          <div class="option-card checkbox-card">
+            <input type="checkbox" name="mod-aspectos" id="ma-1" value="Propuesta de valor">
+            <label for="ma-1"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Propuesta de valor</div></div></label>
+          </div>
+          <div class="option-card checkbox-card">
+            <input type="checkbox" name="mod-aspectos" id="ma-2" value="Segmentos de clientes">
+            <label for="ma-2"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Segmentos de clientes</div></div></label>
+          </div>
+          <div class="option-card checkbox-card">
+            <input type="checkbox" name="mod-aspectos" id="ma-3" value="Canales de distribución">
+            <label for="ma-3"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Canales de distribución</div></div></label>
+          </div>
+          <div class="option-card checkbox-card">
+            <input type="checkbox" name="mod-aspectos" id="ma-4" value="Fuentes de ingreso / monetización">
+            <label for="ma-4"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Fuentes de ingreso / monetización</div></div></label>
+          </div>
+          <div class="option-card checkbox-card">
+            <input type="checkbox" name="mod-aspectos" id="ma-5" value="Estructura de costos">
+            <label for="ma-5"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Estructura de costos</div></div></label>
+          </div>
+          <div class="option-card checkbox-card">
+            <input type="checkbox" name="mod-aspectos" id="ma-6" value="Socios y alianzas clave">
+            <label for="ma-6"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Socios y alianzas clave</div></div></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">¿Tienes un Canvas o documento previo? <span class="hint">Opcional</span></label>
+        <div class="cards-grid">
+          <div class="option-card">
+            <input type="radio" name="mod-canvas" id="mc-1" value="Sí, lo tengo y lo compartiré">
+            <label for="mc-1"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Sí, lo tengo y lo compartiré</div></div></label>
+          </div>
+          <div class="option-card">
+            <input type="radio" name="mod-canvas" id="mc-2" value="No, construimos desde cero">
+            <label for="mc-2"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">No, construimos desde cero</div></div></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ·· 4E — OTRO / MIXTO ························ -->
+    <div id="sec-otro" class="svc-section" style="display:none">
+      <div class="info-box">
+        ✏️ Has seleccionado un servicio personalizado. Por favor, proporciona el mayor detalle posible sobre el alcance del trabajo para que podamos diseñar la mejor propuesta de desarrollo.
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="otro-alcance">Describe el objetivo y alcance del trabajo <span class="req">*</span></label>
+        <textarea id="otro-alcance" name="Objetivo y alcance del servicio personalizado" rows="6"
+          placeholder="¿Qué resultado final esperas? ¿Qué información tienes disponible? ¿Cuáles son las secciones o entregables más importantes para ti?"></textarea>
+        <div class="error-msg" id="err-otro-alcance">Por favor describe el objetivo y alcance del trabajo.</div>
+      </div>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-ghost" onclick="prevStep()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Atrás
+      </button>
+      <button class="btn btn-primary" onclick="nextStep()">
+        Continuar
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── PASO 5 · CONTEXTO Y PLAZOS ──────────────────────── -->
+  <div class="step" id="step-5">
+    <div class="step-header">
+      <div class="step-tag">Paso 5 de 6</div>
+      <h2 class="step-title">Últimos Detalles</h2>
+      <p class="step-subtitle">Contexto de entrega, materiales disponibles y cualquier información adicional.</p>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Urgencia de entrega <span class="req">*</span></label>
+      <div class="cards-grid">
+        <div class="option-card">
+          <input type="radio" name="urgencia" id="urg-1" value="Muy urgente">
+          <label for="urg-1"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Muy urgente</div><div class="opt-desc">Necesito el entregable en menos de 2 semanas</div></div></label>
+        </div>
+        <div class="option-card">
+          <input type="radio" name="urgencia" id="urg-2" value="Normal">
+          <label for="urg-2"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Normal</div><div class="opt-desc">Entre 2 y 4 semanas está bien</div></div></label>
+        </div>
+        <div class="option-card">
+          <input type="radio" name="urgencia" id="urg-3" value="Flexible">
+          <label for="urg-3"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Flexible</div><div class="opt-desc">Más de un mes, sin presión de tiempo</div></div></label>
+        </div>
+        <div class="option-card">
+          <input type="radio" name="urgencia" id="urg-4" value="Fecha / evento específico">
+          <label for="urg-4"><div class="opt-indicator"></div><div class="opt-body"><div class="opt-title">Fecha / evento específico</div><div class="opt-desc">Reunión con banco, pitch, concurso…</div></div></label>
+        </div>
+      </div>
+      <div class="error-msg" id="err-urgencia">Por favor selecciona la urgencia de entrega.</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="fecha-evento">Evento o fecha específica <span class="hint">Opcional</span></label>
+      <input type="text" id="fecha-evento" name="Evento o fecha específica"
+        placeholder="Ej. Reunión con banco el 15 de junio / Pitch day el 30 de julio">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="documentos">Documentos e información que puedes compartir <span class="hint">Opcional</span></label>
+      <textarea id="documentos" name="Documentos disponibles" rows="6"
+        placeholder="Lista los archivos o información que tienes disponible para compartir:&#10;• Estados financieros (Balance, Estado de resultados, etc.)&#10;• Presentaciones o pitches anteriores&#10;• Estudios de mercado previos&#10;• Contratos o acuerdos relevantes&#10;• Base de datos de clientes o ventas&#10;• Otros documentos…"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="adicional">Información adicional o contexto importante <span class="hint">Opcional</span></label>
+      <textarea id="adicional" name="Información adicional" rows="5"
+        placeholder="¿Hay algo más que debamos saber antes de comenzar? Desafíos del sector, contexto competitivo, restricciones, preferencias de presentación, etc."></textarea>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-ghost" onclick="prevStep()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Atrás
+      </button>
+      <button class="btn btn-primary" onclick="nextStep()">
+        Continuar
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── PASO 6 · REVISIÓN Y CONFIRMACIÓN ────────────────── -->
+  <div class="step" id="step-6">
+    <div class="step-header">
+      <div class="step-tag">Paso 6 de 6</div>
+      <h2 class="step-title">Confirma tu Briefing</h2>
+      <p class="step-subtitle">Revisa los datos ingresados antes de enviar. Si necesitas corregir algo, usa el botón Atrás.</p>
+    </div>
+
+    <div class="review-block">
+      <div class="review-block-title">Contacto</div>
+      <div class="review-row"><span class="review-key">Nombre</span><span class="review-val" id="rv-nombre">—</span></div>
+      <div class="review-row"><span class="review-key">Empresa</span><span class="review-val" id="rv-empresa">—</span></div>
+      <div class="review-row"><span class="review-key">Correo</span><span class="review-val" id="rv-correo">—</span></div>
+      <div class="review-row"><span class="review-key">Ubicación</span><span class="review-val" id="rv-ubicacion">—</span></div>
+    </div>
+
+    <div class="review-block">
+      <div class="review-block-title">Empresa</div>
+      <div class="review-row"><span class="review-key">Sector</span><span class="review-val" id="rv-sector">—</span></div>
+      <div class="review-row"><span class="review-key">Etapa</span><span class="review-val" id="rv-etapa">—</span></div>
+      <div class="review-row"><span class="review-key">Constitución</span><span class="review-val" id="rv-constitucion">—</span></div>
+    </div>
+
+    <div class="review-block">
+      <div class="review-block-title">Proyecto</div>
+      <div class="review-row"><span class="review-key">Servicio</span><span class="review-val" id="rv-servicio">—</span></div>
+      <div class="review-row"><span class="review-key">Urgencia</span><span class="review-val" id="rv-urgencia">—</span></div>
+      <div class="review-row"><span class="review-key">Documentos</span><span class="review-val" id="rv-documentos">—</span></div>
+    </div>
+
+    <label class="consent-wrap" for="consent">
+      <input type="checkbox" id="consent">
+      <span class="consent-text">
+        Confirmo que la información proporcionada es verídica y que autorizo a
+        <strong>KUND. advisory</strong> a utilizarla exclusivamente para el desarrollo del proyecto
+        contratado. Entiendo que esta información es confidencial.
+      </span>
+    </label>
+    <div class="error-msg" id="err-consent">Debes confirmar tu consentimiento para enviar.</div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-ghost" onclick="prevStep()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Atrás
+      </button>
+      <button class="btn btn-primary" id="submitBtn" onclick="submitForm()">
+        Enviar briefing
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── PANTALLA DE ÉXITO ────────────────────────────────── -->
+  <div class="success-screen" id="success-screen">
+    <div class="success-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+    <h2 class="success-title">¡Briefing recibido!</h2>
+    <p class="success-text">
+      Tu información llegó correctamente. En las próximas <strong>24–48 horas hábiles</strong>
+      me pondré en contacto contigo para confirmar los siguientes pasos.
+      Gracias por tu confianza en <strong>KUND. advisory</strong>.
+    </p>
+  </div>
+
+  <form id="hidden-form" action="https://formspree.io/f/TU_FORMSPREE_ID" method="POST"></form>
+
+</div>
+</main>
+
+<!-- ══ FOOTER ═══════════════════════════════════════════════ -->
+<footer>
+  <span class="footer-text">© 2024 KUND. advisory — Información confidencial</span>
+</footer>
+
+<!-- ══ JAVASCRIPT ════════════════════════════════════════════ -->
+<script>
+  var currentStep = 0;
+  var TOTAL = 6;
+
+  /* ── NAVIGATION ─────────────────────────────────────────── */
+
+  function startForm() {
+    document.getElementById('progressWrap').style.display = 'flex';
+    showStep(1);
+  }
+
+  function showStep(n) {
+    document.querySelectorAll('.step').forEach(function(s) {
+      s.classList.remove('active');
+    });
+    var target = document.getElementById('step-' + n);
+    if (!target) return;
+    target.classList.add('active');
+    currentStep = n;
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function updateProgress() {
+    var pct = ((currentStep - 1) / (TOTAL - 1)) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = currentStep + ' / ' + TOTAL;
+    document.querySelectorAll('.dot').forEach(function(dot) {
+      var s = parseInt(dot.dataset.step, 10);
+      dot.classList.remove('active', 'done');
+      if (s === currentStep) dot.classList.add('active');
+      else if (s < currentStep) dot.classList.add('done');
+    });
+  }
+
+  function nextStep() {
+    if (!validateStep(currentStep)) return;
+    if (currentStep < TOTAL) {
+      var next = currentStep + 1;
+      showStep(next);
+      if (next === TOTAL) buildReview();
+    }
+  }
+
+  function prevStep() {
+    if (currentStep > 1) showStep(currentStep - 1);
+  }
+
+  /* ── VALIDATION ─────────────────────────────────────────── */
+
+  function setFieldError(fieldId, errId, hasError) {
+    var field = fieldId ? document.getElementById(fieldId) : null;
+    var err   = errId   ? document.getElementById(errId)   : null;
+    if (field) field.classList.toggle('field-error', hasError);
+    if (err)   err.classList.toggle('show', hasError);
+    if (hasError && field) {
+      field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  function requireField(id, errId) {
+    var el = document.getElementById(id);
+    if (!el) return true;
+    var ok = el.value.trim() !== '';
+    setFieldError(id, errId, !ok);
+    return ok;
+  }
+
+  function requireEmail(id, errId) {
+    var el = document.getElementById(id);
+    if (!el) return true;
+    var ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim());
+    setFieldError(id, errId, !ok);
+    return ok;
+  }
+
+  function requireSelect(id, errId) {
+    var el = document.getElementById(id);
+    if (!el) return true;
+    var ok = el.value !== '';
+    setFieldError(id, errId, !ok);
+    return ok;
+  }
+
+  function requireRadio(name, errId) {
+    var checked = document.querySelector('input[name="' + name + '"]:checked');
+    var ok = !!checked;
+    var err = document.getElementById(errId);
+    if (err) err.classList.toggle('show', !ok);
+    if (!ok) {
+      var first = document.querySelector('input[name="' + name + '"]');
+      if (first) {
+        var grp = first.closest('.form-group');
+        if (grp) grp.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+    return ok;
+  }
+
+  function validateStep(n) {
+    var valid = true;
+
+    if (n === 1) {
+      if (!requireField('nombre', 'err-nombre'))   valid = false;
+      if (!requireField('empresa', 'err-empresa'))  valid = false;
+      if (!requireEmail('correo', 'err-correo'))   valid = false;
+    }
+
+    if (n === 2) {
+      if (!requireRadio('constitucion', 'err-constitucion')) valid = false;
+      if (!requireSelect('sector', 'err-sector'))            valid = false;
+      if (!requireSelect('etapa', 'err-etapa'))              valid = false;
+    }
+
+    if (n === 3) {
+      if (!requireRadio('servicio', 'err-servicio')) valid = false;
+      if (getService() === 'otro') {
+        if (!requireField('otro-desc', 'err-otro-desc')) valid = false;
+      }
+    }
+
+    if (n === 4) {
+      var svc = getService();
+      if (svc === 'plan') {
+        if (!requireRadio('plan-proposito', 'err-plan-proposito')) valid = false;
+        if (!requireField('plan-producto',  'err-plan-producto'))   valid = false;
+        if (!requireField('plan-mercado',   'err-plan-mercado'))    valid = false;
+      } else if (svc === 'financiero') {
+        if (!requireRadio('fin-uso', 'err-fin-uso')) valid = false;
+      } else if (svc === 'marketing') {
+        if (!requireRadio('mkt-objetivo', 'err-mkt-objetivo')) valid = false;
+      } else if (svc === 'modelo') {
+        if (!requireRadio('mod-etapa', 'err-mod-etapa')) valid = false;
+      } else if (svc === 'otro') {
+        if (!requireField('otro-alcance', 'err-otro-alcance')) valid = false;
+      }
+    }
+
+    if (n === 5) {
+      if (!requireRadio('urgencia', 'err-urgencia')) valid = false;
+    }
+
+    if (n === 6) {
+      var consent = document.getElementById('consent');
+      var ok = consent && consent.checked;
+      var errC = document.getElementById('err-consent');
+      if (errC) errC.classList.toggle('show', !ok);
+      if (!ok) {
+        if (consent) consent.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        valid = false;
+      }
+    }
+
+    return valid;
+  }
+
+  /* ── SERVICE LOGIC ───────────────────────────────────────── */
+
+  function getService() {
+    var el = document.querySelector('input[name="servicio"]:checked');
+    return el ? el.value : null;
+  }
+
+  function handleServiceChange() {
+    var svc = getService();
+
+    document.querySelectorAll('.svc-section').forEach(function(s) {
+      s.style.display = 'none';
+    });
+
+    var titles = {
+      plan:       ['Plan de Negocios — Detalle',       'Estas preguntas nos permiten construir el plan con la profundidad y el enfoque correcto.'],
+      financiero: ['Análisis Financiero — Detalle',    'Necesitamos entender la situación financiera y el propósito del análisis para calibrar la metodología.'],
+      marketing:  ['Plan de Marketing — Detalle',      'Cuéntanos sobre tu mercado y objetivos para diseñar la estrategia más efectiva.'],
+      modelo:     ['Modelo de Negocio — Detalle',      'Nos ayuda a identificar qué componentes del modelo necesitan mayor desarrollo.'],
+      otro:       ['Servicio Personalizado — Detalle', 'Comparte el detalle de lo que necesitas para preparar el mejor plan de trabajo.']
+    };
+
+    if (svc && titles[svc]) {
+      document.getElementById('step4-title').textContent    = titles[svc][0];
+      document.getElementById('step4-subtitle').textContent = titles[svc][1];
+      var sec = document.getElementById('sec-' + svc);
+      if (sec) sec.style.display = 'block';
+    }
+
+    var condOtro = document.getElementById('cond-otro-desc');
+    if (condOtro) {
+      if (svc === 'otro') condOtro.classList.add('show');
+      else                condOtro.classList.remove('show');
+    }
+  }
+
+  /* ── BUILD REVIEW ────────────────────────────────────────── */
+
+  function buildReview() {
+    function set(id, val) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = val || '—';
+    }
+
+    set('rv-nombre',      document.getElementById('nombre').value.trim());
+    set('rv-empresa',     document.getElementById('empresa').value.trim());
+    set('rv-correo',      document.getElementById('correo').value.trim());
+    set('rv-ubicacion',   document.getElementById('ubicacion').value.trim() || 'No indicado');
+    set('rv-sector',      document.getElementById('sector').value || '—');
+    set('rv-etapa',       document.getElementById('etapa').value || '—');
+
+    var constEl = document.querySelector('input[name="constitucion"]:checked');
+    set('rv-constitucion', constEl ? constEl.value : '—');
+
+    var svcEl = document.querySelector('input[name="servicio"]:checked');
+    var svcLabels = {
+      plan:       'Plan de Negocios Completo',
+      financiero: 'Análisis Financiero',
+      marketing:  'Plan de Marketing / Go-to-Market',
+      modelo:     'Empaquetamiento del Modelo de Negocio',
+      otro:       'Otro / Mixto'
+    };
+    set('rv-servicio', svcEl ? (svcLabels[svcEl.value] || svcEl.value) : '—');
+
+    var urgEl = document.querySelector('input[name="urgencia"]:checked');
+    set('rv-urgencia', urgEl ? urgEl.value : '—');
+
+    var docs = document.getElementById('documentos').value.trim();
+    set('rv-documentos', docs ? (docs.length > 80 ? docs.substring(0, 80) + '…' : docs) : 'No indicado');
+  }
+
+  /* ── COLLECT DATA ────────────────────────────────────────── */
+
+  function collectAllData() {
+    var data = {};
+
+    var simpleFields = [
+      ['nombre',           'Nombre completo'],
+      ['cargo',            'Cargo'],
+      ['empresa',          'Empresa'],
+      ['correo',           'Correo electrónico'],
+      ['telefono',         'Teléfono'],
+      ['ubicacion',        'Ubicación'],
+      ['sector',           'Sector'],
+      ['etapa',            'Etapa del negocio'],
+      ['empleados',        'Número de empleados'],
+      ['facturacion',      'Facturación anual'],
+      ['otro-desc',        'Descripción servicio personalizado'],
+      ['plan-producto',    'Producto o servicio principal'],
+      ['plan-mercado',     'Mercado objetivo'],
+      ['plan-competidores','Competidores identificados'],
+      ['plan-proyeccion',  'Años de proyección financiera'],
+      ['fin-eeff',         'EEFF históricos'],
+      ['fin-horizonte',    'Horizonte de proyección'],
+      ['fin-deuda',        'Deuda financiera'],
+      ['fin-activos',      'Activos fijos'],
+      ['mkt-digital',      'Presencia digital'],
+      ['mkt-canal',        'Canal de venta principal'],
+      ['mkt-presupuesto',  'Presupuesto de marketing'],
+      ['mkt-buyer',        'Cliente ideal'],
+      ['otro-alcance',     'Objetivo y alcance del servicio personalizado'],
+      ['fecha-evento',     'Evento o fecha específica'],
+      ['documentos',       'Documentos disponibles'],
+      ['adicional',        'Información adicional']
+    ];
+
+    simpleFields.forEach(function(pair) {
+      var el = document.getElementById(pair[0]);
+      if (el && el.value.trim()) data[pair[1]] = el.value.trim();
+    });
+
+    var radioFields = [
+      ['constitucion',   'Constitución legal'],
+      ['servicio',       'Servicio contratado'],
+      ['plan-proposito', 'Propósito del plan de negocios'],
+      ['plan-historico', 'Información financiera histórica'],
+      ['fin-uso',        'Uso del análisis financiero'],
+      ['mkt-objetivo',   'Objetivo del plan de marketing'],
+      ['mkt-propuesta',  'Propuesta de valor definida'],
+      ['mod-etapa',      'Etapa del modelo de negocio'],
+      ['mod-canvas',     'Canvas o documento previo'],
+      ['urgencia',       'Urgencia de entrega']
+    ];
+
+    radioFields.forEach(function(pair) {
+      var el = document.querySelector('input[name="' + pair[0] + '"]:checked');
+      if (el) data[pair[1]] = el.value;
+    });
+
+    var checkboxGroups = [
+      ['plan-secciones', 'Secciones del plan a trabajar'],
+      ['fin-tipo',       'Tipos de análisis financiero requeridos'],
+      ['mod-aspectos',   'Aspectos del modelo a desarrollar']
+    ];
+
+    checkboxGroups.forEach(function(pair) {
+      var checked = Array.from(
+        document.querySelectorAll('input[name="' + pair[0] + '"]:checked')
+      ).map(function(el) { return el.value; });
+      if (checked.length) data[pair[1]] = checked.join(', ');
+    });
+
+    return data;
+  }
+
+  /* ── SUBMIT ──────────────────────────────────────────────── */
+
+  async function submitForm() {
+    if (!validateStep(6)) return;
+
+    var btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Enviando…';
+
+    var data = collectAllData();
+    var formData = new FormData();
+    Object.keys(data).forEach(function(k) { formData.append(k, data[k]); });
+
+    try {
+      var res = await fetch('https://formspree.io/f/TU_FORMSPREE_ID', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: formData
+      });
+
+      if (res.ok) {
+        document.getElementById('progressWrap').style.display = 'none';
+        document.querySelectorAll('.step').forEach(function(s) { s.classList.remove('active'); });
+        document.getElementById('success-screen').classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        var json = await res.json().catch(function() { return {}; });
+        var msg = json.errors
+          ? json.errors.map(function(e) { return e.message; }).join(', ')
+          : 'Error al procesar la solicitud (HTTP ' + res.status + ')';
+        alert('No se pudo enviar el formulario:\n\n' + msg + '\n\nPor favor intenta de nuevo o escríbenos directamente.');
+        resetBtn(btn);
+      }
+    } catch (err) {
+      alert('No se pudo conectar con el servidor.\n\nVerifica tu conexión a internet e intenta nuevamente.');
+      resetBtn(btn);
+    }
+  }
+
+  function resetBtn(btn) {
+    btn.disabled = false;
+    btn.innerHTML = 'Enviar briefing <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:middle"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+  }
+
+  /* ── LIVE ERROR CLEARING ─────────────────────────────────── */
+
+  document.addEventListener('input', function(e) {
+    if (e.target.matches('input[type="text"], input[type="email"], input[type="tel"], textarea, select')) {
+      e.target.classList.remove('field-error');
+    }
+  });
+
+  document.addEventListener('change', function(e) {
+    if (e.target.matches('input[type="radio"], input[type="checkbox"]')) {
+      e.target.classList.remove('field-error');
+    }
+  });
+</script>
+
+</body>
+</html>
